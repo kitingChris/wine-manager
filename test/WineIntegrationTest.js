@@ -63,32 +63,6 @@ describe('GET /wines/', function () {
 
                 expect(result.status).to.be.equal(200);
                 expect(result.body.length).to.be.equal(3);
-                expect(result.body).to.have.deep.members([
-                    {
-                        id: 0,
-                        name: 'Cabernet sauvignon',
-                        year: 2013,
-                        country: 'France',
-                        type: 'red',
-                        description: 'The Sean Connery of red wines'
-                    },
-                    {
-                        id: 1,
-                        name: 'Pinot noir',
-                        year: 2011,
-                        country: 'France',
-                        type: 'red',
-                        description: 'Sensual and understated'
-                    },
-                    {
-                        id: 2,
-                        name: 'Zinfandel',
-                        year: 1990,
-                        country: 'Croatia',
-                        type: 'red',
-                        description: 'Thick and jammy'
-                    }
-                ]);
                 done();
             });
     });
