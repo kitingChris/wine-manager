@@ -3,27 +3,27 @@ const WineType = require('../type/WineType');
 
 const postWineHandler = (request, response, next) => {
 
-    request.body = request.body || {}; // prevent exception
+    const data = request.body || {};
 
     const validationErrors = {};
 
-    if(typeof request.body.name !== 'string' || request.body.name.length === 0) {
+    if(typeof data.name !== 'string' || data.name.length === 0) {
         validationErrors.name = 'MISSING';
     }
 
-    if(typeof request.body.year !== 'number' || request.body.year.length === 0) {
+    if(typeof data.year !== 'number' || data.year.length === 0) {
         validationErrors.year = 'MISSING';
-    } else if(request.body.year > (new Date()).getFullYear() || request.body.year < 0 ) {
+    } else if(data.year > (new Date()).getFullYear() || data.year < 0 ) {
         validationErrors.year = 'INVALID';
     }
 
-    if(typeof request.body.country !== 'string' || request.body.country.length === 0) {
+    if(typeof data.country !== 'string' || data.country.length === 0) {
         validationErrors.country = 'MISSING';
     }
 
-    if(typeof request.body.type !== 'string' || request.body.type.length === 0) {
+    if(typeof data.type !== 'string' || data.type.length === 0) {
         validationErrors.type = 'MISSING';
-    } else if(Object.keys(WineType).indexOf(request.body.type) === -1) {
+    } else if(Object.keys(WineType).indexOf(data.type) === -1) {
         validationErrors.type = 'INVALID';
     }
 
@@ -37,11 +37,11 @@ const postWineHandler = (request, response, next) => {
     } else {
 
         const wine = new Wine({
-            name: request.body.name,
-            year: request.body.year,
-            country: request.body.country,
-            type: request.body.type,
-            description: request.body.description || '',
+            name: data.name,
+            year: data.year,
+            country: data.country,
+            type: data.type,
+            description: data.description || '',
         });
 
         wine.save(function (error) {

@@ -12,8 +12,18 @@ const listWineHandler = (request, response, next) => {
         }, {});
 
     Wine.find(filter, function (error, wines) {
-        response.send(wines.map(wine => wine.toJson()));
-        next();
+
+        if (error) {
+            response.status(500);
+            response.send({
+                error: error.msg
+            });
+            next();
+        } else {
+            response.send(wines.map(wine => wine.toJson()));
+            next();
+        }
+        
     });
 
 };

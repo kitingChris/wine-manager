@@ -11,9 +11,9 @@ server.use(restify.plugins.queryParser());
 
 server.get('/wines/', require('./handler/listWineHandler'));
 server.post('/wines/', require('./handler/postWineHandler'));
-//server.get('/wines/:id', require('./handler/getWineHandler'));
+server.get('/wines/:id', require('./handler/getWineHandler'));
 server.put('/wines/:id', require('./handler/putWineHandler'));
-//server.del('/wines/:id', require('./handler/deleteWineHandler'));
+server.del('/wines/:id', require('./handler/deleteWineHandler'));
 
 mongoose.connect(MONGODB_URI);
 mongoose.connection.on('error', console.error.bind(console, 'mongoose connection error:'));
