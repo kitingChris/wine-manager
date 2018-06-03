@@ -17,7 +17,14 @@ const getWineHandler = (request, response, next) => {
             });
             next();
         } else {
-            response.send(wine.toJson());
+            response.send({
+                id: wine.id,
+                name: wine.name,
+                year: wine.year,
+                country: wine.country,
+                type: wine.type,
+                description: wine.description
+            });
             next();
         }
 

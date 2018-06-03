@@ -16,7 +16,7 @@ WineSchema.pre('save', function (next) {
     if (wineDoc.isNew) {
         Sequence.findByIdAndUpdate({_id: 'WineSequence'}, {$inc: {seq: 1}}, {new: true, upsert: true})
             .then(function (wineSequence) {
-                wineDoc.id = wineSequence.seq;
+                wineDoc.id = wineSequence.seq-1;
                 next();
             })
             .catch(function (error) {
@@ -27,17 +27,6 @@ WineSchema.pre('save', function (next) {
         next();
     }
 });
-
-WineSchema.methods.toJson = function () {
-    return {
-        id: this.id,
-        name: this.name,
-        year: this.year,
-        country: this.country,
-        type: this.type,
-        description: this.description
-    };
-};
 
 const Wine = mongoose.model('Wine', WineSchema);
 

@@ -12,7 +12,7 @@ const putWineHandler = (request, response, next) => {
         wineUpdate.name = data.name;
     }
 
-    if(typeof data.year === 'number' && data.year.length > 0) {
+    if(typeof data.year === 'number') {
         if(data.year > (new Date()).getFullYear() || data.year < 0 ) {
             validationErrors.year = 'INVALID';
         } else {
@@ -30,6 +30,10 @@ const putWineHandler = (request, response, next) => {
         } else {
             wineUpdate.type = data.type;
         }
+    }
+
+    if(typeof data.description === 'string' && data.description.length > 0) {
+        wineUpdate.description = data.description;
     }
 
     if(Object.keys(validationErrors).length > 0) {
@@ -66,7 +70,14 @@ const putWineHandler = (request, response, next) => {
                         });
                         next();
                     }
-                    response.send(updatedWine.toJson());
+                    response.send({
+                        id: updatedWine.id,
+                        name: updatedWine.name,
+                        year: updatedWine.year,
+                        country: updatedWine.country,
+                        type: updatedWine.type,
+                        description: updatedWine.description
+                    });
                     next();
                 });
             }

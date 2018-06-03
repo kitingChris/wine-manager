@@ -1,9 +1,9 @@
 const expect = require('chai').expect;
 
-const Wine = require('../../src/model/Wine');
-const WineType = require('../../src/type/WineType');
+const Wine = require('../src/model/Wine');
+const WineType = require('../src/type/WineType');
 
-describe('Wine', function() {
+describe('Model Wine', function() {
     it('should be invalid if name is empty', function(done) {
         const wine = new Wine({
             name: '',
