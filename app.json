@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "postdeploy": "node src/setup.js"
+  }
+}
