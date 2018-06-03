@@ -7,27 +7,26 @@ const NODE_ENV = process.env.NODE_ENV || 'production';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/wine-manager-test';
 
 if(NODE_ENV === 'production' || NODE_ENV === 'prod') {
-    console.warn("Setup is only intended to be executed in non production environment.");
-    return;
+    throw new Error('Setup is only intended to be executed in non production environment.');
 }
 
 mongoose.connect(MONGODB_URI);
 mongoose.connection.on('error', console.error.bind(console, 'mongoose connection error:'));
 
 function done() {
-    console.info("Setup finished.");
+    console.info('Setup finished.');
 }
 
 Wine.deleteMany({}, function (error) {
     if (error) {
         console.error(error);
     }
-    console.info("Wine.deleteMany({}) done.");
+    console.info('Wine.deleteMany({}) done.');
     Sequence.findOneAndUpdate({_id: 'WineSequence'}, {$set: {seq: 0}}, function (error) {
         if (error) {
             console.error(error);
         }
-        console.info("Sequence.findOneAndUpdate({_id: 'WineSequence'}, {$set: {seq: 0}}) done.");
+        console.info('Sequence.findOneAndUpdate({_id: \'WineSequence\'}, {$set: {seq: 0}}) done.');
         fixtures({
             Wine: [
                 {
@@ -59,7 +58,7 @@ Wine.deleteMany({}, function (error) {
             if (error) {
                 console.error(error);
             }
-            console.info("fixtures done.");
+            console.info('fixtures done.');
             done();
         });
 
