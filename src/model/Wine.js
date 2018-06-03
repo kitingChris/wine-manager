@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 const WineType = require('../type/WineType');
-
-const WineSequenceSchema = new mongoose.Schema({
-    _id: {type: String, required: true},
-    seq: {type: Number, default: 0}
-});
-const WineSequence = mongoose.model('WineSequence', WineSequenceSchema);
+const Sequence = require('./Sequence');
 
 const WineSchema = new mongoose.Schema({
     id: {type: Number, unique: true},
@@ -19,7 +14,7 @@ const WineSchema = new mongoose.Schema({
 WineSchema.pre('save', function (next) {
     const wineDoc = this;
     if (wineDoc.isNew) {
-        WineSequence.findByIdAndUpdate({_id: 'WineSequence'}, {$inc: {seq: 1}}, {new: true, upsert: true})
+        Sequence.findByIdAndUpdate({_id: 'WineSequence'}, {$inc: {seq: 1}}, {new: true, upsert: true})
             .then(function (wineSequence) {
                 wineDoc.id = wineSequence.seq;
                 next();

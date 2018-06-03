@@ -33,40 +33,41 @@ const postWineHandler = (request, response, next) => {
             error: 'VALIDATION_ERROR',
             validation: validationErrors
         });
-        return;
-    }
+        next();
+    } else {
 
-    const wine = new Wine({
-        name: request.body.name,
-        year: request.body.year,
-        country: request.body.country,
-        type: request.body.type,
-        description: request.body.description || '',
-    });
+        const wine = new Wine({
+            name: request.body.name,
+            year: request.body.year,
+            country: request.body.country,
+            type: request.body.type,
+            description: request.body.description || '',
+        });
 
-    wine.save(function (error) {
-        if(error) {
-            if(error.code === 11000) {
-                response.status(409);
-                response.send({
-                    error: 'CONFLICT_ERROR'
-                });
+        wine.save(function (error) {
+            if (error) {
+                if (error.code === 11000) {
+                    response.status(409);
+                    response.send({
+                        error: 'CONFLICT_ERROR'
+                    });
+                    next();
+                }
+                else {
+                    console.error(error);
+                    response.status(500);
+                    response.send({
+                        error: 'PERSISTANCE_ERROR'
+                    });
+                    next();
+                }
             }
             else {
-                console.error(error);
-                response.status(500);
-                response.send({
-                    error: 'PERSISTANCE_ERROR'
-                });
+                response.send(wine.toJson());
+                next();
             }
-        }
-        else {
-            response.send(wine.toJson());
-        }
-
-    });
-
-    next();
+        });
+    }
 };
 
 module.exports = postWineHandler;
