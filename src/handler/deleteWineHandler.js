@@ -11,7 +11,7 @@ const deleteWineHandler = (request, response, next) => {
             });
             next();
         } else if(!wine) {
-            response.status(400);
+            response.status(404);
             response.send({
                 error: 'UNKNOWN_OBJECT'
             });

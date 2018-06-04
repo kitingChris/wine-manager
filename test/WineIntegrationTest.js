@@ -109,7 +109,7 @@ describe('GET /wines/:id', function () {
             .set('Accept', 'application/json')
             .end(function (error, result) {
 
-                expect(result.status).to.be.equal(400);
+                expect(result.status).to.be.equal(404);
                 expect(result.body).to.be.deep.equal({
                     error: 'UNKNOWN_OBJECT'
                 });
@@ -239,6 +239,10 @@ describe('PUT /wines/:id', function () {
         supertest(server)
             .put('/wines/0')
             .send({
+                name: 'Pinot noir',
+                year: 2011,
+                country: 'France',
+                type: 'red',
                 description: 'Sensual and understated (Strawberry, raspberry, cherry)'
             })
             .type('json')
@@ -265,7 +269,9 @@ describe('PUT /wines/:id', function () {
         supertest(server)
             .put('/wines/0')
             .send({
+                name: 'Pinot noir',
                 year: -1,
+                country: 'France',
                 type: 'invalid'
             })
             .type('json')
@@ -289,10 +295,18 @@ describe('PUT /wines/:id', function () {
     it('should respond with an error if no entry exists', function (done) {
         supertest(server)
             .put('/wines/1')
+            .send({
+                name: 'Pinot noir',
+                year: 2011,
+                country: 'France',
+                type: 'red',
+                description: 'Sensual and understated (Strawberry, raspberry, cherry)'
+            })
+            .type('json')
             .set('Accept', 'application/json')
             .end(function (error, result) {
 
-                expect(result.status).to.be.equal(400);
+                expect(result.status).to.be.equal(404);
                 expect(result.body).to.be.deep.equal({
                     error: 'UNKNOWN_OBJECT'
                 });
@@ -312,7 +326,7 @@ describe('DELETE /wines/:id', function () {
                     year: 2011,
                     country: 'France',
                     type: 'red',
-                    description: 'Sensual and understated'
+                    description: 'Sensual and understated (Strawberry, raspberry, cherry)'
                 }
             ]
         }, done);
@@ -345,7 +359,7 @@ describe('DELETE /wines/:id', function () {
             .del('/wines/1')
             .end(function (error, result) {
 
-                expect(result.status).to.be.equal(400);
+                expect(result.status).to.be.equal(404);
                 expect(result.body).to.be.deep.equal({
                     error: 'UNKNOWN_OBJECT'
                 });

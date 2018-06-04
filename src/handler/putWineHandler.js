@@ -5,35 +5,26 @@ const putWineHandler = (request, response, next) => {
 
     const data = request.body || {};
 
-    const wineUpdate = {};
     const validationErrors = {};
 
-    if(typeof data.name === 'string' && data.name.length > 0) {
-        wineUpdate.name = data.name;
+    if(typeof data.name !== 'string' || data.name.length === 0) {
+        validationErrors.name = 'MISSING';
     }
 
-    if(typeof data.year === 'number') {
-        if(data.year > (new Date()).getFullYear() || data.year < 0 ) {
-            validationErrors.year = 'INVALID';
-        } else {
-            wineUpdate.year = data.year;
-        }
+    if(typeof data.year !== 'number' || data.year.length === 0) {
+        validationErrors.year = 'MISSING';
+    } else if(data.year > (new Date()).getFullYear() || data.year < 0 ) {
+        validationErrors.year = 'INVALID';
     }
 
-    if(typeof data.country === 'string' && data.country.length > 0) {
-        wineUpdate.country = data.country;
+    if(typeof data.country !== 'string' || data.country.length === 0) {
+        validationErrors.country = 'MISSING';
     }
 
-    if(typeof data.type === 'string' && data.type.length > 0) {
-        if(Object.keys(WineType).indexOf(data.type) === -1) {
-            validationErrors.type = 'INVALID';
-        } else {
-            wineUpdate.type = data.type;
-        }
-    }
-
-    if(typeof data.description === 'string' && data.description.length > 0) {
-        wineUpdate.description = data.description;
+    if(typeof data.type !== 'string' || data.type.length === 0) {
+        validationErrors.type = 'MISSING';
+    } else if(Object.keys(WineType).indexOf(data.type) === -1) {
+        validationErrors.type = 'INVALID';
     }
 
     if(Object.keys(validationErrors).length > 0) {
@@ -54,13 +45,13 @@ const putWineHandler = (request, response, next) => {
                 });
                 next();
             } else if(!wine) {
-                response.status(400);
+                response.status(404);
                 response.send({
                     error: 'UNKNOWN_OBJECT'
                 });
                 next();
             } else {
-                wine.set(wineUpdate);
+                wine.set(data);
                 wine.save(function (error, updatedWine) {
                     if (error) {
                         console.error(error);

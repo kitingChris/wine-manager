@@ -46,21 +46,12 @@ const postWineHandler = (request, response, next) => {
 
         wine.save(function (error) {
             if (error) {
-                if (error.code === 11000) {
-                    response.status(409);
-                    response.send({
-                        error: 'CONFLICT_ERROR'
-                    });
-                    next();
-                }
-                else {
-                    console.error(error);
-                    response.status(500);
-                    response.send({
-                        error: 'PERSISTANCE_ERROR'
-                    });
-                    next();
-                }
+                console.error(error);
+                response.status(500);
+                response.send({
+                    error: 'PERSISTANCE_ERROR'
+                });
+                next();
             }
             else {
                 response.send({
